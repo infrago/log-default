@@ -1,6 +1,7 @@
 package log_default
 
 import (
+	"github.com/infrago/infra"
 	"github.com/infrago/log"
 )
 
@@ -9,5 +10,5 @@ func Driver() log.Driver {
 }
 
 func init() {
-	log.Register("default", Driver())
+	infra.Register("default", Driver())
 }
