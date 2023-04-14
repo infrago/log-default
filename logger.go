@@ -29,11 +29,19 @@ func (this *defaultConnect) Open() error {
 
 // 关闭连接
 func (this *defaultConnect) Close() error {
-	this.Flush()
 	return nil
 }
 
-func (this *defaultConnect) Write(msg log.Log) error {
+func (this *defaultConnect) Write(msgs ...log.Log) error {
+	for _, msg := range msgs {
+		if err := this.wrinting(msg); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (this *defaultConnect) wrinting(msg log.Log) error {
 	body := this.instance.Format(msg)
 	if msg.Level <= log.LevelWarning {
 		this.stderr.Write([]byte(body + "\n"))
@@ -41,7 +49,4 @@ func (this *defaultConnect) Write(msg log.Log) error {
 		this.stdout.Write([]byte(body + "\n"))
 	}
 	return nil
-}
-
-func (this *defaultConnect) Flush() {
 }
